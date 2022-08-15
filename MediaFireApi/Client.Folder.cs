@@ -213,5 +213,39 @@ namespace MediaFireApi
 
             return jsonRes.Response?.NewFolderKey.Split(',');
         }
+
+        /// <summary>
+        /// Move folders to a target folder
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <param name="targetFolderKey">The target folder key</param>
+        /// <returns>True on success</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FolderMove(IEnumerable<string> folderKeys, string targetFolderKey)
+        {
+            if (folderKeys == null)
+                throw new ArgumentNullException(nameof(folderKeys));
+            if (string.IsNullOrEmpty(targetFolderKey))
+                throw new ArgumentNullException(nameof(targetFolderKey));
+            await CheckSessionToken();
+
+            var req = new FolderCopyRequest()
+            {
+                SessionToken = _sessionToken,
+                FolderKeySrc = string.Join(",", folderKeys),
+                FolderKeyDst = targetFolderKey
+            };
+            var res = await _client.PostAsync(GetApiUri("folder/move.php"), ToFormUrlEncodedContent(req));
+            var resContent = await res.Content.ReadAsStringAsync();
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(resContent);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            if (jsonRes == null)
+                throw new Exception("Cannot move folders");
+
+            return true;
+        }
     }
 }
