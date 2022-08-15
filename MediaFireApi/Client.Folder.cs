@@ -179,5 +179,39 @@ namespace MediaFireApi
 
             return true;
         }
+
+        /// <summary>
+        /// Copy folders to a target folder
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <param name="targetFolderKey">The target folder key</param>
+        /// <returns>The keys of the newly created folders</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys, string targetFolderKey)
+        {
+            if (folderKeys == null)
+                throw new ArgumentNullException(nameof(folderKeys));
+            if (string.IsNullOrEmpty(targetFolderKey))
+                throw new ArgumentNullException(nameof(targetFolderKey));
+            await CheckSessionToken();
+
+            var req = new FolderCopyRequest()
+            {
+                SessionToken = _sessionToken,
+                FolderKeySrc = string.Join(",", folderKeys),
+                FolderKeyDst = targetFolderKey
+            };
+            var res = await _client.PostAsync(GetApiUri("folder/copy.php"), ToFormUrlEncodedContent(req));
+            var resContent = await res.Content.ReadAsStringAsync();
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(resContent);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCopyResponse>>(resContent);
+            if (jsonRes == null || jsonRes.Response?.NewFolderKey == null)
+                throw new Exception("Cannot copy folders");
+
+            return jsonRes.Response?.NewFolderKey.Split(',');
+        }
     }
 }
