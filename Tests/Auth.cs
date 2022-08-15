@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Tests;
 
-public class Auth
+public class Auth : TestBase
 {
     [SetUp]
     public void Setup()
@@ -16,7 +16,7 @@ public class Auth
     {
         var settings = new ClientSettings();
         using var client = new Client(settings);
-        await client.Login("", "");
+        await client.Login(UserEmail, Password);
         await client.Logout();
 
         Assert.Pass();
@@ -28,7 +28,7 @@ public class Auth
     {
         var settings = new ClientSettings();
         using var client = new Client(settings);
-        await client.Login("", "");
+        await client.Login(UserEmail, Password);
         await client.RenewSessionToken();
         await client.Logout();
 

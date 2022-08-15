@@ -4,20 +4,20 @@ using NUnit.Framework;
 
 namespace Tests;
 
-public class Folder
+public class Folder : TestBase
 {
     private Client? _client;
 
     [OneTimeSetUp]
-    public async void Setup()
+    public async Task Setup()
     {
         var settings = new ClientSettings();
         _client = new Client(settings);
-        await _client.Login("", "");
+        await _client.Login(UserEmail, Password);
     }
 
     [OneTimeTearDown]
-    public async void ClassCleanup()
+    public async Task ClassCleanup()
     {
         if (_client != null) {
             await _client.Logout();
