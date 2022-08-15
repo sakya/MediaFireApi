@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Response
@@ -36,5 +37,8 @@ namespace MediaFireApi.Models.Response
 
         [JsonProperty("folder_info")]
         public FolderInfoModel FolderInfo { get; set; }
+
+        [JsonProperty("folder_infos")]
+        public List<FolderInfoModel> FolderInfos { get; set; }
     }
 }

@@ -20,10 +20,13 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
 }
 
 var folderInfo = await client.FolderGetInfo("myfiles");
-var folderContent = await client.FolderGetContent("myfiles", FolderContentType.Files);
+var folderContent = await client.FolderGetContent("myfiles", FolderContentType.Folders);
+if (folderContent.Folders?.Count > 1) {
+    var foldersInfo = await client.FolderGetInfo(new[] { folderContent.Folders[0].FolderKey, folderContent.Folders[1].FolderKey });
+}
 var newFolderKey = await client.FolderCreate(null, "test");
-var folderDelete = await client.FolderDelete(new string[] { newFolderKey });
-folderDelete = await client.FolderPurge(new string[] { newFolderKey });
+var folderDelete = await client.FolderDelete(new[] { newFolderKey });
+folderDelete = await client.FolderPurge(new[] { newFolderKey });
 
 
 await client.Logout();

@@ -12,14 +12,20 @@ namespace MediaFireApi
     {
         public async Task<FolderInfoResponse.FolderInfoModel> FolderGetInfo(string folderKey)
         {
-            if (string.IsNullOrEmpty(folderKey))
-                throw new ArgumentNullException(nameof(folderKey));
+            var res = await FolderGetInfo(new[] { folderKey });
+            return res.Count > 0 ? res[0] : null;
+        }
+
+        public async Task<List<FolderInfoResponse.FolderInfoModel>> FolderGetInfo(IEnumerable<string> folderKeys)
+        {
+            if (folderKeys == null)
+                throw new ArgumentNullException(nameof(folderKeys));
             await CheckSessionToken();
 
             var req = new FolderInfoRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKey = folderKey
+                FolderKey = string.Join("," ,folderKeys)
             };
             var res = await _client.PostAsync(GetApiUri("folder/get_info.php"), ToFormUrlEncodedContent(req));
             var resContent = await res.Content.ReadAsStringAsync();
@@ -29,7 +35,9 @@ namespace MediaFireApi
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderInfoResponse>>(resContent);
             CheckApiResponse(jsonRes, "Cannot get folder info");
 
-            return jsonRes?.Response.FolderInfo;
+            if (jsonRes?.Response.FolderInfos == null && jsonRes?.Response.FolderInfo != null)
+                return new List<FolderInfoResponse.FolderInfoModel>() { jsonRes?.Response.FolderInfo };
+            return jsonRes?.Response.FolderInfos;
         }
 
         public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey, FolderContentType contentType, int chunk = 1, int chunksize = 100)
