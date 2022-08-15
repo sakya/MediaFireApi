@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
+using MediaFireApi.Models.Response;
 using Newtonsoft.Json;
 
 namespace MediaFireApi
@@ -49,6 +52,14 @@ namespace MediaFireApi
             if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-10)) {
                 await RenewSessionToken();
             }
+        }
+
+        private void CheckApiResponse<T>(ResponseModel<T> apiResponse, string errorMessage) where T : ApiResponse
+        {
+            if (apiResponse == null || apiResponse.Response == null)
+                throw new Exception(errorMessage);
+            if (apiResponse.Response.Result == ApiResult.Error)
+                throw new Exception($"{errorMessage}: {apiResponse.Response.Message}");
         }
 
         private FormUrlEncodedContent ToFormUrlEncodedContent(RequestModel model)

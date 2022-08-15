@@ -28,10 +28,9 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderInfoResponse>>(resContent);
-            if (jsonRes?.Response?.FolderInfo == null)
-                throw new Exception("Cannot get folder/get_info");
+            CheckApiResponse(jsonRes, "Cannot get folder info");
 
-            return jsonRes.Response.FolderInfo;
+            return jsonRes?.Response.FolderInfo;
         }
 
         public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey, FolderContentType contentType, int chunk = 1, int chunksize = 100)
@@ -55,10 +54,9 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderContentResponse>>(resContent);
-            if (jsonRes?.Response?.FolderContent?.Files == null && jsonRes?.Response?.FolderContent?.Folders == null)
-                throw new Exception("Cannot get folder/get_content");
+            CheckApiResponse(jsonRes, "Cannot get folder content");
 
-            return jsonRes.Response.FolderContent;
+            return jsonRes?.Response.FolderContent;
         }
 
         /// <summary>
@@ -89,10 +87,9 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCreateResponse>>(resContent);
-            if (jsonRes?.Response.FolderKey == null)
-                throw new Exception("Cannot create folder");
+            CheckApiResponse(jsonRes, "Cannot create folder");
 
-            return jsonRes.Response.FolderKey;
+            return jsonRes?.Response.FolderKey;
         }
 
         /// <summary>
@@ -132,8 +129,7 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
-            if (jsonRes == null)
-                throw new Exception("Cannot delete folders");
+            CheckApiResponse(jsonRes, "Cannot delete folder");
 
             return true;
         }
@@ -174,8 +170,7 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
-            if (jsonRes == null)
-                throw new Exception("Cannot purge folders");
+            CheckApiResponse(jsonRes, "Cannot purge folder");
 
             return true;
         }
@@ -208,10 +203,9 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCopyResponse>>(resContent);
-            if (jsonRes == null || jsonRes.Response?.NewFolderKey == null)
-                throw new Exception("Cannot copy folders");
+            CheckApiResponse(jsonRes, "Cannot copy folder");
 
-            return jsonRes.Response?.NewFolderKey.Split(',');
+            return jsonRes?.Response?.NewFolderKey.Split(',');
         }
 
         /// <summary>
@@ -242,8 +236,45 @@ namespace MediaFireApi
                 throw new Exception(resContent);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
-            if (jsonRes == null)
-                throw new Exception("Cannot move folders");
+            CheckApiResponse(jsonRes, "Cannot move folder");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Update a folder information.
+        /// </summary>
+        /// <param name="folderKey">Folder key</param>
+        /// <param name="name">The folder name</param>
+        /// <param name="description">The folder description</param>
+        /// <param name="privacy">The folder <see cref="Privacy"/></param>
+        /// <param name="privacyRecursive">Whether or not applying 'privacy' to sub-folders</param>
+        /// <returns>True on success</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FolderUpdate(string folderKey, string name = null, string description = null, Privacy? privacy = null, YesNo? privacyRecursive = null)
+        {
+            if (string.IsNullOrEmpty(folderKey))
+                throw new ArgumentNullException(nameof(folderKey));
+            await CheckSessionToken();
+
+            var req = new FolderUpdateRequest()
+            {
+                SessionToken = _sessionToken,
+                FolderKey = folderKey,
+
+                FolderName = name,
+                Description = description,
+                Privacy = privacy,
+                PrivacyRecursive = privacyRecursive
+            };
+            var res = await _client.PostAsync(GetApiUri("folder/update.php"), ToFormUrlEncodedContent(req));
+            var resContent = await res.Content.ReadAsStringAsync();
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(resContent);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            CheckApiResponse(jsonRes, "Cannot update folder");
 
             return true;
         }
