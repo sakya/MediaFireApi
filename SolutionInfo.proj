@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <PackageId>MediaFireApi</PackageId>
+    <Authors>Paolo Iommarini</Authors>
+    <Copyright>Copyright © 2022, Paolo Iommarini</Copyright>
+    <PackageProjectUrl>https://github.com/sakya/MediaFireApi</PackageProjectUrl>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/sakya/MediaFireApi</RepositoryUrl>
+    <RespositoryType>git</RespositoryType>
+    <PackageTags>MediaFire cloud-storage</PackageTags>
+    <Description>MediaFireApi lets you use the MediaFire APIs</Description>
+    <Version>0.1.0.0</Version>
+  </PropertyGroup>
+</Project>
