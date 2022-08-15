@@ -24,6 +24,8 @@ var folderContent = await client.FolderGetContent("myfiles", FolderContentType.F
 if (folderContent.Folders?.Count > 1) {
     var foldersInfo = await client.FolderGetInfo(new[] { folderContent.Folders[0].FolderKey, folderContent.Folders[1].FolderKey });
 }
+folderContent = await client.FolderGetContent("myfiles", FolderContentType.Files);
+
 var newFolderKey = await client.FolderCreate(null, "test");
 var folderDelete = await client.FolderDelete(new[] { newFolderKey });
 folderDelete = await client.FolderPurge(new[] { newFolderKey });

@@ -30,6 +30,19 @@ namespace MediaFireApi.Models
         Files
     }
 
+    public enum FileType
+    {
+        Application,
+        Archive,
+        Audio,
+        Development,
+        Data,
+        Document,
+        Image,
+        Presentation,
+        Spreadsheet,
+        Video
+    }
     public enum ActionOnDuplicate
     {
         /// <summary>

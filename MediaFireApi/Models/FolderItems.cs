@@ -14,6 +14,9 @@ namespace MediaFireApi.Models
         [JsonProperty("created_utc")]
         public DateTime? CreatedUtc { get; set; }
 
+        [JsonProperty("delete_date")]
+        public DateTime? DeleteDate { get; set; }
+
         [JsonProperty("revision")]
         public int Revision { get; set; }
 
@@ -25,12 +28,24 @@ namespace MediaFireApi.Models
     {
         public class Link
         {
+            [JsonProperty("direct_download")]
+            public string DirectDownload { get; set; }
+
             [JsonProperty("normal_download")]
             public string NormalDownload { get; set; }
+
+            [JsonProperty("view")]
+            public string View { get; set; }
+
+            [JsonProperty("read")]
+            public string Read { get; set; }
         }
 
         [JsonProperty("quickkey")]
         public string QuickKey { get; set; }
+
+        [JsonProperty("parent_folderkey")]
+        public string ParentFolderKey { get; set; }
 
         [JsonProperty("hash")]
         public string Hash { get; set; }
@@ -44,14 +59,11 @@ namespace MediaFireApi.Models
         [JsonProperty("privacy")]
         public Privacy Privacy { get; set; }
 
-        [JsonProperty("password_protected")]
-        public string PasswordProtected { get; set; }
-
         [JsonProperty("mimetype")]
         public string Mimetype { get; set; }
 
         [JsonProperty("filetype")]
-        public string Filetype { get; set; }
+        public FileType? Filetype { get; set; }
 
         [JsonProperty("view")]
         public int View { get; set; }
@@ -67,6 +79,9 @@ namespace MediaFireApi.Models
 
         [JsonProperty("links")]
         public Link Links { get; set; }
+
+        [JsonProperty("shared_by_user")]
+        public int SharedByUser { get; set; }
     }
 
     public class FolderItem : Item
