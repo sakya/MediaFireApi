@@ -43,7 +43,7 @@ namespace MediaFireApi
             CheckApiResponse(jsonRes, "Cannot get file info");
 
             if (jsonRes?.Response.FileInfos == null && jsonRes?.Response.FileItemInfo != null)
-                return new List<FileItem>() { jsonRes?.Response.FileItemInfo };
+                return new List<FileItem>() { jsonRes.Response.FileItemInfo };
             return jsonRes?.Response.FileInfos;
         }
     }

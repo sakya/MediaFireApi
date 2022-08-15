@@ -36,7 +36,7 @@ namespace MediaFireApi
             CheckApiResponse(jsonRes, "Cannot get folder info");
 
             if (jsonRes?.Response.FolderInfos == null && jsonRes?.Response.FolderItemInfo != null)
-                return new List<FolderItem>() { jsonRes?.Response.FolderItemInfo };
+                return new List<FolderItem>() { jsonRes.Response.FolderItemInfo };
             return jsonRes?.Response.FolderInfos;
         }
 
