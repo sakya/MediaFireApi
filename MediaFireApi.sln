@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFireApi", "MediaFireApi\MediaFireApi.csproj", "{ED414851-7B25-443C-925D-1B5519A5FB2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3F5E08C4-2393-4562-BE54-3B969C959201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{5F603BFC-DC1A-4ED4-88F6-D7731A9E2169}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{FFE2C21D-50D8-4322-9DCD-048E21CBF120}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED414851-7B25-443C-925D-1B5519A5FB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED414851-7B25-443C-925D-1B5519A5FB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED414851-7B25-443C-925D-1B5519A5FB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED414851-7B25-443C-925D-1B5519A5FB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F5E08C4-2393-4562-BE54-3B969C959201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5E08C4-2393-4562-BE54-3B969C959201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5E08C4-2393-4562-BE54-3B969C959201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5E08C4-2393-4562-BE54-3B969C959201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F603BFC-DC1A-4ED4-88F6-D7731A9E2169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F603BFC-DC1A-4ED4-88F6-D7731A9E2169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F603BFC-DC1A-4ED4-88F6-D7731A9E2169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F603BFC-DC1A-4ED4-88F6-D7731A9E2169}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
