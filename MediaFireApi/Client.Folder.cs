@@ -10,13 +10,13 @@ namespace MediaFireApi
 {
     public partial class Client
     {
-        public async Task<FolderInfoResponse.FolderInfoModel> FolderGetInfo(string folderKey)
+        public async Task<FolderItem> FolderGetInfo(string folderKey)
         {
             var res = await FolderGetInfo(new[] { folderKey });
             return res.Count > 0 ? res[0] : null;
         }
 
-        public async Task<List<FolderInfoResponse.FolderInfoModel>> FolderGetInfo(IEnumerable<string> folderKeys)
+        public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys)
         {
             if (folderKeys == null)
                 throw new ArgumentNullException(nameof(folderKeys));
@@ -35,8 +35,8 @@ namespace MediaFireApi
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderInfoResponse>>(resContent);
             CheckApiResponse(jsonRes, "Cannot get folder info");
 
-            if (jsonRes?.Response.FolderInfos == null && jsonRes?.Response.FolderInfo != null)
-                return new List<FolderInfoResponse.FolderInfoModel>() { jsonRes?.Response.FolderInfo };
+            if (jsonRes?.Response.FolderInfos == null && jsonRes?.Response.FolderItemInfo != null)
+                return new List<FolderItem>() { jsonRes?.Response.FolderItemInfo };
             return jsonRes?.Response.FolderInfos;
         }
 

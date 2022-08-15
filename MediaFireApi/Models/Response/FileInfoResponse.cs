@@ -1,19 +1,15 @@
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Response
 {
     public class FileInfoResponse : ApiResponse
     {
-        public class FileInfoModel
-        {
-
-        }
-
         [JsonProperty("file_info")]
-        public FileInfoModel FileInfo { get; set; }
+        public FileItem FileItemInfo { get; set; }
 
         [JsonProperty("file_infos")]
-        public List<FileInfoModel> FileInfos { get; set; }
+        public List<FileItem> FileInfos { get; set; }
     }
 }

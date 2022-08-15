@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
 using MediaFireApi.Models.Response;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ namespace MediaFireApi
 {
     public partial class Client
     {
-        public async Task<FileInfoResponse.FileInfoModel> FileGetInfo(string folderKey)
+        public async Task<FileItem> FileGetInfo(string folderKey)
         {
             var res = await FileGetInfo(new[] { folderKey });
             return res.Count > 0 ? res[0] : null;
@@ -22,7 +23,7 @@ namespace MediaFireApi
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<List<FileInfoResponse.FileInfoModel>> FileGetInfo(IEnumerable<string> quickKeys)
+        public async Task<List<FileItem>> FileGetInfo(IEnumerable<string> quickKeys)
         {
             if (quickKeys == null)
                 throw new ArgumentNullException(nameof(quickKeys));
@@ -41,8 +42,8 @@ namespace MediaFireApi
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileInfoResponse>>(resContent);
             CheckApiResponse(jsonRes, "Cannot get file info");
 
-            if (jsonRes?.Response.FileInfos == null && jsonRes?.Response.FileInfo != null)
-                return new List<FileInfoResponse.FileInfoModel>() { jsonRes?.Response.FileInfo };
+            if (jsonRes?.Response.FileInfos == null && jsonRes?.Response.FileItemInfo != null)
+                return new List<FileItem>() { jsonRes?.Response.FileItemInfo };
             return jsonRes?.Response.FileInfos;
         }
     }
