@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -16,7 +15,7 @@ namespace MediaFireApi
     {
         // https://www.mediafire.com/developers/core_api/1.5/getting_started/
         private const string ApiBaseAddress = "https://www.mediafire.com/api/1.5/";
-        private string _sessionToken = null;
+        private string _sessionToken;
         private DateTime? _lastSessionRenew;
         private HttpClient _client;
         private HttpClientHandler _clientHandler;

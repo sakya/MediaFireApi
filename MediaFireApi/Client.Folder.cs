@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
@@ -101,7 +100,7 @@ namespace MediaFireApi
         /// <exception cref="Exception"></exception>
         public Task<bool> FolderDelete(string folderKey)
         {
-            return FolderDelete(new string[] { folderKey });
+            return FolderDelete(new[] { folderKey });
         }
 
 
@@ -143,7 +142,7 @@ namespace MediaFireApi
         /// <exception cref="Exception"></exception>
         public Task<bool> FolderPurge(string folderKey)
         {
-            return FolderPurge(new string[] { folderKey });
+            return FolderPurge(new[] { folderKey });
         }
 
         /// <summary>
