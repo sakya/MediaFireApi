@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
@@ -60,7 +61,16 @@ namespace MediaFireApi
             return jsonRes.Response.FolderContent;
         }
 
-        public async Task<string> FolderCreate(string parentKey, string name)
+        /// <summary>
+        /// Create a folder
+        /// </summary>
+        /// <param name="parentKey">The parent folder key</param>
+        /// <param name="name">The new folder name</param>
+        /// <param name="actionOnDuplicate">The <see cref="ActionOnDuplicate"/></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<string> FolderCreate(string parentKey, string name, ActionOnDuplicate actionOnDuplicate = ActionOnDuplicate.Keep)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
@@ -70,7 +80,8 @@ namespace MediaFireApi
             {
                 SessionToken = _sessionToken,
                 ParentKey = parentKey,
-                FolderName = name
+                FolderName = name,
+                ActionOnDuplicate = actionOnDuplicate
             };
             var res = await _client.PostAsync(GetApiUri("folder/create.php"), ToFormUrlEncodedContent(req));
             var resContent = await res.Content.ReadAsStringAsync();
@@ -84,16 +95,36 @@ namespace MediaFireApi
             return jsonRes.Response.FolderKey;
         }
 
-        public async Task<bool> FolderDelete(string folderKey)
+        /// <summary>
+        /// Move a folder to the trash can
+        /// </summary>
+        /// <param name="folderKey">The folder key</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public Task<bool> FolderDelete(string folderKey)
         {
-            if (string.IsNullOrEmpty(folderKey))
-                throw new ArgumentNullException(nameof(folderKey));
+            return FolderDelete(new string[] { folderKey });
+        }
+
+
+        /// <summary>
+        /// Move folders to the trash can
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FolderDelete(IEnumerable<string> folderKeys)
+        {
+            if (folderKeys == null)
+                throw new ArgumentNullException(nameof(folderKeys));
             await CheckSessionToken();
 
             var req = new FolderDeleteRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKey = folderKey
+                FolderKey = string.Join(",", folderKeys)
             };
             var res = await _client.PostAsync(GetApiUri("folder/delete.php"), ToFormUrlEncodedContent(req));
             var resContent = await res.Content.ReadAsStringAsync();
@@ -102,7 +133,49 @@ namespace MediaFireApi
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
             if (jsonRes == null)
-                throw new Exception("Cannot delete folder");
+                throw new Exception("Cannot delete folders");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Delete a folder permanently
+        /// </summary>
+        /// <param name="folderKey">The folder key</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public Task<bool> FolderPurge(string folderKey)
+        {
+            return FolderPurge(new string[] { folderKey });
+        }
+
+        /// <summary>
+        /// Delete folders permanently
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FolderPurge(IEnumerable<string> folderKeys)
+        {
+            if (folderKeys == null)
+                throw new ArgumentNullException(nameof(folderKeys));
+            await CheckSessionToken();
+
+            var req = new FolderDeleteRequest()
+            {
+                SessionToken = _sessionToken,
+                FolderKey = string.Join(",", folderKeys)
+            };
+            var res = await _client.PostAsync(GetApiUri("folder/purge.php"), ToFormUrlEncodedContent(req));
+            var resContent = await res.Content.ReadAsStringAsync();
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(resContent);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            if (jsonRes == null)
+                throw new Exception("Cannot purge folders");
 
             return true;
         }

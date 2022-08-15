@@ -4,6 +4,9 @@ namespace MediaFireApi.Models.Response
 {
     public abstract class ApiResponse
     {
+        [JsonProperty("asynchronous")]
+        public YesNo? Asynchronous { get; set; }
+
         [JsonProperty("current_api_version")]
         public string CurrentApiVersion { get; set; }
 

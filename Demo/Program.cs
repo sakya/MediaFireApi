@@ -2,6 +2,11 @@
 using MediaFireApi.Models;
 using Newtonsoft.Json;
 
+// To run the demo program create a file account-settings.json in the solution folder
+// {
+//   "userEmail": "MediaFireAccountEmail",
+//   "password": "MediaFirePassword",
+// }
 var settings = new ClientSettings();
 using var client = new Client(settings);
 
@@ -17,6 +22,8 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
 var folderInfo = await client.FolderGetInfo("myfiles");
 var folderContent = await client.FolderGetContent("myfiles", FolderContentType.Files);
 var newFolderKey = await client.FolderCreate(null, "test");
-var folderDelete = await client.FolderDelete(newFolderKey);
+var folderDelete = await client.FolderDelete(new string[] { newFolderKey });
+folderDelete = await client.FolderPurge(new string[] { newFolderKey });
+
 
 await client.Logout();
