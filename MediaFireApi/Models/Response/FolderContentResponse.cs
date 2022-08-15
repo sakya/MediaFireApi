@@ -8,17 +8,23 @@ namespace MediaFireApi.Models.Response
     {
         public class FolderContentModel
         {
-            [JsonProperty("folder_key")] public string FolderKey { get; set; }
+            [JsonProperty("folder_key")]
+            public string FolderKey { get; set; }
 
-            [JsonProperty("content_type")] public string ContentType { get; set; }
+            [JsonProperty("content_type")]
+            public string ContentType { get; set; }
 
-            [JsonProperty("chunk")] public int Chunk { get; set; }
+            [JsonProperty("chunk_number")]
+            public int ChunkNumber { get; set; }
 
-            [JsonProperty("chunk_size")] public int ChunkSize { get; set; }
+            [JsonProperty("more_chunks")]
+            public YesNo MoreChunks { get; set; }
 
-            [JsonProperty("files")] public List<FileItem> Files { get; set; }
+            [JsonProperty("files")]
+            public List<FileItem> Files { get; set; }
 
-            [JsonProperty("folders")] public List<FolderItem> Folders { get; set; }
+            [JsonProperty("folders")]
+            public List<FolderItem> Folders { get; set; }
         }
 
         [JsonProperty("folder_content")]

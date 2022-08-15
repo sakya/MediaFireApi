@@ -34,11 +34,26 @@ namespace MediaFireApi.Models
             [JsonProperty("normal_download")]
             public string NormalDownload { get; set; }
 
+            [JsonProperty("download")]
+            public string Download { get; set; }
+
             [JsonProperty("view")]
             public string View { get; set; }
 
             [JsonProperty("read")]
             public string Read { get; set; }
+
+            [JsonProperty("edit")]
+            public string Edit { get; set; }
+
+            [JsonProperty("watch")]
+            public string Watch { get; set; }
+
+            [JsonProperty("listen")]
+            public string Listen { get; set; }
+
+            [JsonProperty("streaming")]
+            public string Streaming { get; set; }
         }
 
         [JsonProperty("quickkey")]
