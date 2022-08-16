@@ -10,6 +10,6 @@
     <RespositoryType>git</RespositoryType>
     <PackageTags>MediaFire cloud-storage</PackageTags>
     <Description>MediaFireApi lets you use the MediaFire APIs</Description>
-    <Version>0.1.1.0</Version>
+    <Version>0.1.2.0</Version>
   </PropertyGroup>
 </Project>
