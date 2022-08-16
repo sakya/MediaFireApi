@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using MediaFireApi.Exceptions;
@@ -10,6 +11,7 @@ using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
 using MediaFireApi.Models.Response;
 using Newtonsoft.Json;
+using Timer = System.Timers.Timer;
 
 namespace MediaFireApi
 {
@@ -38,7 +40,8 @@ namespace MediaFireApi
         // https://www.mediafire.com/developers/core_api/1.5/getting_started/
         private const string ApiBaseAddress = "https://www.mediafire.com/api/1.5/";
         private string _sessionToken;
-        private Timer _sessionTimer;
+        private readonly Timer _sessionTimer;
+        private SemaphoreSlim _sessionSema = new SemaphoreSlim(1, 1);
         private DateTime? _lastSessionRenew;
         private readonly HttpClient _client;
         private readonly HttpClientHandler _clientHandler;
@@ -74,7 +77,7 @@ namespace MediaFireApi
 
         private async void OnSessionTimer(object source, ElapsedEventArgs e)
         {
-            if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-9)) {
+            if (!string.IsNullOrEmpty(_sessionToken) && _lastSessionRenew <= DateTime.UtcNow.AddMinutes(-9)) {
                 await UserRenewSessionToken();
             }
         }

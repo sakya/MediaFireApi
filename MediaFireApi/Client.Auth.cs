@@ -80,13 +80,14 @@ namespace MediaFireApi
         /// <exception cref="Exception"></exception>
         public async Task Logout()
         {
-            if (string.IsNullOrEmpty(_sessionToken))
-                throw new Exception("Not logged in");
+            await CheckSessionToken();
 
+            await _sessionSema.WaitAsync();
             var req = new ApiRequest()
             {
                 SessionToken = _sessionToken
             };
+
             using (var res = await _client.PostAsync(new Uri("https://www.mediafire.com/application/logout.php"),
                        ToFormUrlEncodedContent(req))) {
                 var resContent = await res.Content.ReadAsStringAsync();
@@ -95,6 +96,9 @@ namespace MediaFireApi
             }
 
             _sessionToken = null;
+            _lastSessionRenew = null;
+            _sessionSema.Release();
+
         }
     }
 }

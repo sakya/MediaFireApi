@@ -39,16 +39,21 @@ namespace MediaFireApi
             if (string.IsNullOrEmpty(_sessionToken))
                 throw new Exception("Not logged in");
 
-            var req = new ApiRequest()
-            {
-                SessionToken = _sessionToken
-            };
-            var res = await GetApiResponse(GetApiUri("user/renew_session_token.php"), ToFormUrlEncodedContent(req));
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<RenewSessionTokenResponse>>(res.Content);
-            if (jsonRes?.Response == null || string.IsNullOrEmpty(jsonRes.Response.SessionToken))
-                throw new Exception("Cannot get session token");
-            _sessionToken = jsonRes.Response.SessionToken;
-            _lastSessionRenew = DateTime.UtcNow;
+            await _sessionSema.WaitAsync();
+            try {
+                var req = new ApiRequest()
+                {
+                    SessionToken = _sessionToken
+                };
+                var res = await GetApiResponse(GetApiUri("user/renew_session_token.php"), ToFormUrlEncodedContent(req));
+                var jsonRes = JsonConvert.DeserializeObject<ResponseModel<RenewSessionTokenResponse>>(res.Content);
+                if (jsonRes?.Response == null || string.IsNullOrEmpty(jsonRes.Response.SessionToken))
+                    throw new Exception("Cannot get session token");
+                _sessionToken = jsonRes.Response.SessionToken;
+                _lastSessionRenew = DateTime.UtcNow;
+            } finally {
+                _sessionSema.Release();
+            }
         }
     }
 }
