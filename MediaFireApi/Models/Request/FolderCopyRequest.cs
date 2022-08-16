@@ -15,6 +15,5 @@ namespace MediaFireApi.Models.Request
 
         [JsonProperty("folder_path_dst")]
         public string FolderPathDst { get; set; }
-
     }
 }

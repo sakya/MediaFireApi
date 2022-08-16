@@ -1,29 +1,7 @@
-using System;
 using Newtonsoft.Json;
 
 namespace MediaFireApi.Models
 {
-    public abstract class Item
-    {
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        [JsonProperty("created")]
-        public DateTime? Created { get; set; }
-
-        [JsonProperty("created_utc")]
-        public DateTime? CreatedUtc { get; set; }
-
-        [JsonProperty("delete_date")]
-        public DateTime? DeleteDate { get; set; }
-
-        [JsonProperty("revision")]
-        public int Revision { get; set; }
-
-        [JsonProperty("flag")]
-        public int Flag { get; set; }
-    }
-
     public class FileItem : Item
     {
         public class Link
@@ -97,38 +75,5 @@ namespace MediaFireApi.Models
 
         [JsonProperty("shared_by_user")]
         public int SharedByUser { get; set; }
-    }
-
-    public class FolderItem : Item
-    {
-        [JsonProperty("folderkey")]
-        public string FolderKey { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("tags")]
-        public string Tags { get; set; }
-
-        [JsonProperty("privacy")]
-        public Privacy? Privacy { get; set; }
-
-        [JsonProperty("file_count")]
-        public int FileCount { get; set; }
-
-        [JsonProperty("folder_count")]
-        public int FolderCount { get; set; }
-
-        [JsonProperty("dropbox_enabled")]
-        public YesNo DropboxEnabled { get; set; }
-
-        [JsonProperty("total_folders")]
-        public int TotalFolders { get; set; }
-
-        [JsonProperty("total_files")]
-        public int TotalFiles { get; set; }
-
-        [JsonProperty("total_size")]
-        public long TotalSize { get; set; }
     }
 }
