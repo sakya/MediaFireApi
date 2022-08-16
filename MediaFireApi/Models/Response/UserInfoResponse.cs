@@ -49,16 +49,16 @@ namespace MediaFireApi.Models.Response
             public string TosAccepted { get; set; }
 
             [JsonProperty("used_storage_size")]
-            public int UsedStorageSize { get; set; }
+            public long UsedStorageSize { get; set; }
 
             [JsonProperty("base_storage")]
-            public int BaseStorage { get; set; }
+            public long BaseStorage { get; set; }
 
             [JsonProperty("bonus_storage")]
-            public int BonusStorage { get; set; }
+            public long BonusStorage { get; set; }
 
             [JsonProperty("storage_limit")]
-            public int StorageLimit { get; set; }
+            public long StorageLimit { get; set; }
 
             [JsonProperty("storage_limit_exceeded")]
             public YesNo? StorageLimitExceeded { get; set; }
