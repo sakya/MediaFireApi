@@ -19,6 +19,8 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
     }
 }
 
+await client.FolderGetDepth(folderPath: "/DepthTest/Depth1/Depth2/Depth3");
+
 var uploadCheck = await client.UploadCheck(Client.RootFolderKey, "test.mp4", 8 * 1024 * 1024);
 using (var ms = new MemoryStream()) {
     for (int i = 0; i < 1024*1024; i++) {

@@ -12,6 +12,37 @@ namespace MediaFireApi
     public partial class Client
     {
         /// <summary>
+        /// Specifies how deep in the folder structure, how far from root, the target folder is.
+        /// The number of levels deep is returned with a list of "chain folders" which illustrate the direct path from root to the target folder.
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<FolderDepthResponse.FolderDepthModel> FolderGetDepth(IEnumerable<string> folderKeys = null, string folderPath = null)
+        {
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
+            await CheckSessionToken();
+
+            var req = new FolderDeleteRequest()
+            {
+                SessionToken = _sessionToken,
+                FolderKey = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPath = folderPath
+            };
+            var res = await GetApiResponse(GetApiUri("folder/get_depth.php"), ToFormUrlEncodedContent(req));
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(res.Content);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDepthResponse>>(res.Content);
+            CheckApiResponse(jsonRes, "Cannot get folder depth");
+
+            return jsonRes?.Response.FolderDepth;
+        }
+
+        /// <summary>
         /// Returns a list of a folder's details.
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>

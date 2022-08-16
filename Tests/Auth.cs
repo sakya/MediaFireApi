@@ -7,7 +7,7 @@ namespace Tests;
 public class Auth : TestBase
 {
     [SetUp]
-    public void Setup()
+    public new void Setup()
     {
     }
 
