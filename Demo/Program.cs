@@ -20,13 +20,16 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
 }
 
 var userInfo = await client.UserGetInfo();
-var folderInfo = await client.FolderGetInfo(new[] {"myfiles" });
+var folderInfo = await client.FolderGetInfo(new[] { Client.RootFolderKey });
 folderInfo = await client.FolderGetInfo(folderPath: "/Documents");
-var folderContent = await client.FolderGetContent("myfiles", FolderContentType.Folders);
-if (folderContent.Folders?.Count > 1) {
+var folderContent = await client.FolderGetContent(Client.RootFolderKey, contentType: FolderContentType.Folders);
+if (folderContent.Folders?.Count > 0) {
     var foldersInfo = await client.FolderGetInfo(new[] { folderContent.Folders[0].FolderKey, folderContent.Folders[1].FolderKey });
 }
-folderContent = await client.FolderGetContent("myfiles", FolderContentType.Files);
+folderContent = await client.FolderGetContent(Client.RootFolderKey, contentType: FolderContentType.Files);
+if (folderContent.Files?.Count > 0) {
+    var directLinks = await client.DownloadDirectLink(new[] { folderContent.Files[0].QuickKey });
+}
 
 var newFolderKey = await client.FolderCreate(null, "test");
 var folderDelete = await client.FolderDelete(new[] { newFolderKey });

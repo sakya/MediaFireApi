@@ -13,6 +13,8 @@ namespace MediaFireApi
 {
     public partial class Client : IDisposable
     {
+        public const string RootFolderKey = "myfiles";
+
         internal class ApiCallResponse
         {
             public ApiCallResponse(HttpStatusCode statusCode, string content)

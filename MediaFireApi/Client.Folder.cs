@@ -46,22 +46,24 @@ namespace MediaFireApi
         /// Returns a collection of top-level folders or files for target folder.
         /// </summary>
         /// <param name="folderKey">The folder key</param>
+        /// <param name="folderPath">Folder path</param>
         /// <param name="contentType">Specifies the type of content to return.</param>
         /// <param name="chunk">Specifies which segment of the results to return starting from 1</param>
         /// <param name="chunkSize">The number of items to include in each chunk returned. Range: 100 to 1000. Default: 100. </param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey, FolderContentType contentType, int chunk = 1, int chunkSize = 100)
+        public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey = null, string folderPath = null, FolderContentType contentType = FolderContentType.Files, int chunk = 1, int chunkSize = 100)
         {
-            if (string.IsNullOrEmpty(folderKey))
-                throw new ArgumentNullException(nameof(folderKey));
+            if (string.IsNullOrEmpty(folderKey) && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException($"{nameof(folderKey)} or {nameof(folderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderContentRequest()
             {
                 SessionToken = _sessionToken,
                 FolderKey = folderKey,
+                FolderPath = folderPath,
 
                 ContentType = contentType,
                 ChunkSize = chunkSize,
