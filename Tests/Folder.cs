@@ -28,7 +28,7 @@ public class Folder : TestBase
     [Test(ExpectedResult = true)]
     public async Task<bool> GetInfo()
     {
-        await _client!.FolderGetInfo("myfiles");
+        await _client!.FolderGetInfo(new[] { "myfiles" });
 
         Assert.Pass();
         return true;

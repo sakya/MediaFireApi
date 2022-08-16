@@ -10,22 +10,17 @@ namespace MediaFireApi
 {
     public partial class Client
     {
-        public async Task<FolderItem> FolderGetInfo(string folderKey)
+        public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
-            var res = await FolderGetInfo(new[] { folderKey });
-            return res.Count > 0 ? res[0] : null;
-        }
-
-        public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys)
-        {
-            if (folderKeys == null)
-                throw new ArgumentNullException(nameof(folderKeys));
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException("FolderKeys or folderPath must be provided");
             await CheckSessionToken();
 
             var req = new FolderInfoRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKey = string.Join("," ,folderKeys)
+                FolderKey = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPath = folderPath
             };
             var res = await GetApiResponse(GetApiUri("folder/get_info.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
@@ -97,35 +92,24 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Move a folder to the trash can
-        /// </summary>
-        /// <param name="folderKey">The folder key</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="Exception"></exception>
-        public Task<bool> FolderDelete(string folderKey)
-        {
-            return FolderDelete(new[] { folderKey });
-        }
-
-
-        /// <summary>
         /// Move folders to the trash can
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> FolderDelete(IEnumerable<string> folderKeys)
+        public async Task<bool> FolderDelete(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
-            if (folderKeys == null)
-                throw new ArgumentNullException(nameof(folderKeys));
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException("FolderKeys or folderPath must be provided");
             await CheckSessionToken();
 
             var req = new FolderDeleteRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKey = string.Join(",", folderKeys)
+                FolderKey = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPath = folderPath
             };
             var res = await GetApiResponse(GetApiUri("folder/delete.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
@@ -138,34 +122,24 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Delete a folder permanently
-        /// </summary>
-        /// <param name="folderKey">The folder key</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="Exception"></exception>
-        public Task<bool> FolderPurge(string folderKey)
-        {
-            return FolderPurge(new[] { folderKey });
-        }
-
-        /// <summary>
         /// Delete folders permanently
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> FolderPurge(IEnumerable<string> folderKeys)
+        public async Task<bool> FolderPurge(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
-            if (folderKeys == null)
-                throw new ArgumentNullException(nameof(folderKeys));
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException("FolderKeys or folderPath must be provided");
             await CheckSessionToken();
 
             var req = new FolderDeleteRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKey = string.Join(",", folderKeys)
+                FolderKey = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPath = folderPath
             };
             var res = await GetApiResponse(GetApiUri("folder/purge.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
@@ -181,14 +155,15 @@ namespace MediaFireApi
         /// Copy folders to a target folder
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
         /// <param name="targetFolderKey">The target folder key</param>
         /// <returns>The keys of the newly created folders</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys, string targetFolderKey)
+        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null)
         {
-            if (folderKeys == null)
-                throw new ArgumentNullException(nameof(folderKeys));
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException("FolderKeys or folderPath must be provided");
             if (string.IsNullOrEmpty(targetFolderKey))
                 throw new ArgumentNullException(nameof(targetFolderKey));
             await CheckSessionToken();
@@ -196,8 +171,9 @@ namespace MediaFireApi
             var req = new FolderCopyRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKeySrc = string.Join(",", folderKeys),
-                FolderKeyDst = targetFolderKey
+                FolderKeySrc = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderKeyDst = targetFolderKey,
+                FolderPath = folderPath
             };
             var res = await GetApiResponse(GetApiUri("folder/copy.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
@@ -213,14 +189,15 @@ namespace MediaFireApi
         /// Move folders to a target folder
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
         /// <param name="targetFolderKey">The target folder key</param>
         /// <returns>True on success</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> FolderMove(IEnumerable<string> folderKeys, string targetFolderKey)
+        public async Task<bool> FolderMove(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null)
         {
-            if (folderKeys == null)
-                throw new ArgumentNullException(nameof(folderKeys));
+            if (folderKeys == null && string.IsNullOrEmpty(folderPath))
+                throw new ArgumentException("FolderKeys or folderPath must be provided");
             if (string.IsNullOrEmpty(targetFolderKey))
                 throw new ArgumentNullException(nameof(targetFolderKey));
             await CheckSessionToken();
@@ -228,7 +205,8 @@ namespace MediaFireApi
             var req = new FolderCopyRequest()
             {
                 SessionToken = _sessionToken,
-                FolderKeySrc = string.Join(",", folderKeys),
+                FolderKeySrc = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPath = folderPath,
                 FolderKeyDst = targetFolderKey
             };
             var res = await GetApiResponse(GetApiUri("folder/move.php"), ToFormUrlEncodedContent(req));
@@ -245,6 +223,7 @@ namespace MediaFireApi
         /// Update a folder information.
         /// </summary>
         /// <param name="folderKey">Folder key</param>
+        /// <param name="folderPath">Folder path</param>
         /// <param name="name">The folder name</param>
         /// <param name="description">The folder description</param>
         /// <param name="privacy">The folder <see cref="Privacy"/></param>
@@ -252,7 +231,7 @@ namespace MediaFireApi
         /// <returns>True on success</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> FolderUpdate(string folderKey, string name = null, string description = null, Privacy? privacy = null, YesNo? privacyRecursive = null)
+        public async Task<bool> FolderUpdate(string folderKey = null, string folderPath = null, string name = null, string description = null, Privacy? privacy = null, YesNo? privacyRecursive = null)
         {
             if (string.IsNullOrEmpty(folderKey))
                 throw new ArgumentNullException(nameof(folderKey));
@@ -262,7 +241,7 @@ namespace MediaFireApi
             {
                 SessionToken = _sessionToken,
                 FolderKey = folderKey,
-
+                FolderPath = folderPath,
                 FolderName = name,
                 Description = description,
                 Privacy = privacy,

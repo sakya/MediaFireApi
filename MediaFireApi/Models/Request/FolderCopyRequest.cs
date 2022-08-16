@@ -7,6 +7,9 @@ namespace MediaFireApi.Models.Request
         [JsonProperty("folder_key_src")]
         public string FolderKeySrc { get; set; }
 
+        [JsonProperty("folder_path")]
+        public string FolderPath { get; set; }
+
         [JsonProperty("folder_key_dst")]
         public string FolderKeyDst { get; set; }
     }
