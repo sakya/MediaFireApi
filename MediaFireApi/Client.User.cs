@@ -10,8 +10,7 @@ namespace MediaFireApi
     {
         public async Task<UserInfoResponse.UserInfoModel> UserGetInfo()
         {
-            if (string.IsNullOrEmpty(_sessionToken))
-                throw new Exception("Not logged in");
+            await CheckSessionToken();
 
             var req = new RequestModel()
             {
@@ -29,8 +28,7 @@ namespace MediaFireApi
 
         public async Task UserRenewSessionToken()
         {
-            if (string.IsNullOrEmpty(_sessionToken))
-                throw new Exception("Not logged in");
+            await CheckSessionToken();
 
             var req = new RequestModel()
             {

@@ -78,6 +78,29 @@ namespace MediaFireApi
             return jsonRes?.Response?.NewQuickKey.Split(',');
         }
 
+        public async Task<FileCreateResponse> FileCreate(string parentKey = null, string parentPath = null, string fileName = null)
+        {
+            if (string.IsNullOrEmpty(parentKey) && string.IsNullOrEmpty(parentPath))
+                throw new ArgumentException($"{nameof(parentKey)} or {nameof(parentPath)} must be provided");
+            await CheckSessionToken();
+
+            var req = new FileCreateRequest()
+            {
+                SessionToken = _sessionToken,
+                FileName = fileName,
+                ParentKey = parentKey,
+                ParentPath = parentPath
+            };
+            var res = await GetApiResponse(GetApiUri("file/create.php"), ToFormUrlEncodedContent(req));
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(res.Content);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileCreateResponse>>(res.Content);
+            CheckApiResponse(jsonRes, "Cannot create file");
+
+            return jsonRes?.Response;
+        }
+
         /// <summary>
         /// Move files to the trash can
         /// </summary>

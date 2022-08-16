@@ -72,7 +72,7 @@ namespace MediaFireApi.Models
         public long Size { get; set; }
 
         [JsonProperty("privacy")]
-        public Privacy Privacy { get; set; }
+        public Privacy? Privacy { get; set; }
 
         [JsonProperty("mimetype")]
         public string Mimetype { get; set; }
@@ -111,7 +111,7 @@ namespace MediaFireApi.Models
         public string Tags { get; set; }
 
         [JsonProperty("privacy")]
-        public Privacy Privacy { get; set; }
+        public Privacy? Privacy { get; set; }
 
         [JsonProperty("file_count")]
         public int FileCount { get; set; }
