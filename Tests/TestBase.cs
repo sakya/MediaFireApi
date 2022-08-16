@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using MediaFireApi;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace Tests;
 
@@ -9,6 +12,7 @@ public class TestBase
 {
     protected string UserEmail;
     protected string Password;
+    protected Client? _client;
 
     public TestBase()
     {
@@ -22,6 +26,22 @@ public class TestBase
                 Password = accountSettings["password"];
             }
         }
+    }
 
+    [OneTimeSetUp]
+    public async Task Setup()
+    {
+        var settings = new ClientSettings();
+        _client = new Client(settings);
+        await _client.Login(UserEmail, Password);
+    }
+
+    [OneTimeTearDown]
+    public async Task ClassCleanup()
+    {
+        if (_client != null) {
+            await _client.Logout();
+            _client.Dispose();
+        }
     }
 }
