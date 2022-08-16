@@ -33,7 +33,7 @@ namespace MediaFireApi
                 throw new Exception(res.Content);
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<DownloadDirectLinkResponse>>(res.Content);
-            CheckApiResponse(jsonRes, "Cannot get file link");
+            CheckApiResponse(jsonRes, "Cannot get direct download link");
 
             return jsonRes?.Response.Links;
         }

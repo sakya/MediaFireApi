@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace MediaFireApi
 {
+    /// <summary>
+    /// The MediaFire client
+    /// </summary>
     public partial class Client : IDisposable
     {
         public const string RootFolderKey = "myfiles";

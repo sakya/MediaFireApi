@@ -12,6 +12,13 @@ namespace MediaFireApi
     {
         private const string SecurityElement = "<input type=\"hidden\" name=\"security\" value=\"";
 
+        /// <summary>
+        /// Login to the user account
+        /// </summary>
+        /// <param name="userEmail">The user email</param>
+        /// <param name="password">The user password</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task Login(string userEmail, string password)
         {
             if (string.IsNullOrEmpty(userEmail))
@@ -67,6 +74,10 @@ namespace MediaFireApi
             }
         }
 
+        /// <summary>
+        /// Logout the current user
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public async Task Logout()
         {
             if (string.IsNullOrEmpty(_sessionToken))

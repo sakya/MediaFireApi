@@ -78,6 +78,15 @@ namespace MediaFireApi
             return jsonRes?.Response?.NewQuickKey.Split(',');
         }
 
+        /// <summary>
+        /// Creates a new file.
+        /// </summary>
+        /// <param name="parentKey">The parent folder key</param>
+        /// <param name="parentPath">The parent folder path</param>
+        /// <param name="fileName">The file name</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<FileCreateResponse> FileCreate(string parentKey = null, string parentPath = null, string fileName = null)
         {
             if (string.IsNullOrEmpty(parentKey) && string.IsNullOrEmpty(parentPath))

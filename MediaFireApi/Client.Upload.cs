@@ -13,6 +13,16 @@ namespace MediaFireApi
 {
     public partial class Client
     {
+        /// <summary>
+        /// Checks if a duplicate filename exists in the destination folder and verifies folder permissions for non-owner uploads
+        /// </summary>
+        /// <param name="folderKey">The folder key</param>
+        /// <param name="fileName">The file name</param>
+        /// <param name="size">The file size</param>
+        /// <param name="resumable">Specifies whether to make this upload resumable or not</param>
+        /// <param name="hash">The SHA256 hash of the file being uploaded</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<UploadCheckResponse> UploadCheck(string folderKey, string fileName, long size, bool resumable = false, string hash = null)
         {
             await CheckSessionToken();
@@ -37,6 +47,18 @@ namespace MediaFireApi
             return jsonRes.Response;
         }
 
+        /// <summary>
+        /// Upload a new file through POST to the user's account
+        /// </summary>
+        /// <param name="stream">The file stream</param>
+        /// <param name="contentType">The file content type</param>
+        /// <param name="fileName">The file name</param>
+        /// <param name="size">The file size</param>
+        /// <param name="folderKey">The folder key</param>
+        /// <param name="path">The folder path</param>
+        /// <param name="actionOnDuplicate">Specifies the action to take when the file already exists, by name, in the destination folder</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task UploadSimple(Stream stream, string contentType, string fileName, long size, string folderKey = null, string path = null, ActionOnDuplicate? actionOnDuplicate = null)
         {
             if (string.IsNullOrEmpty(fileName))
