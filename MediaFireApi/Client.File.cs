@@ -18,7 +18,7 @@ namespace MediaFireApi
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<List<FileItem>> FileGetInfo(IEnumerable<string> quickKeys = null, string filePath = null)
+        public async Task<IEnumerable<FileItem>> FileGetInfo(IEnumerable<string> quickKeys = null, string filePath = null)
         {
             if (quickKeys == null && string.IsNullOrEmpty(filePath))
                 throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");

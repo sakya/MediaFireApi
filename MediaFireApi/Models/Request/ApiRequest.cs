@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Request
 {
-    public class RequestModel
+    public class ApiRequest
     {
         [JsonProperty("session_token")]
         public string SessionToken { get; set; }

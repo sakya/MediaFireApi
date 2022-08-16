@@ -17,7 +17,7 @@ namespace MediaFireApi
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<List<DownloadDirectLinkResponse.DirectLink>> DownloadDirectLink(IEnumerable<string> quickKeys = null)
+        public async Task<IEnumerable<DownloadDirectLinkResponse.DirectLink>> DownloadDirectLink(IEnumerable<string> quickKeys = null)
         {
             if (quickKeys == null)
                 throw new ArgumentNullException(nameof(quickKeys));

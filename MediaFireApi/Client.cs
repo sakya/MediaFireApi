@@ -17,6 +17,7 @@ namespace MediaFireApi
     public partial class Client : IDisposable
     {
         public const string RootFolderKey = "myfiles";
+        public const string TrashFolderKey = "trash";
 
         internal class ApiCallResponse
         {
@@ -87,7 +88,7 @@ namespace MediaFireApi
                 throw new Exception($"{errorMessage}: {apiResponse.Response.Message}");
         }
 
-        private FormUrlEncodedContent ToFormUrlEncodedContent(RequestModel model)
+        private FormUrlEncodedContent ToFormUrlEncodedContent(ApiRequest model)
         {
             var values = new Dictionary<string, string>();
             foreach (var p in model.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)) {

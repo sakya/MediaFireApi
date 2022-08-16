@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Request
 {
-    public class FolderCopyRequest : RequestModel
+    public class FolderCopyRequest : ApiRequest
     {
         [JsonProperty("folder_key_src")]
         public string FolderKeySrc { get; set; }

@@ -83,7 +83,7 @@ namespace MediaFireApi
             if (string.IsNullOrEmpty(_sessionToken))
                 throw new Exception("Not logged in");
 
-            var req = new RequestModel()
+            var req = new ApiRequest()
             {
                 SessionToken = _sessionToken
             };

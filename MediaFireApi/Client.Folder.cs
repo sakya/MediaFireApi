@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaFireApi.Models;
@@ -50,7 +49,7 @@ namespace MediaFireApi
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys = null, string folderPath = null)
+        public async Task<IEnumerable<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
                 throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");

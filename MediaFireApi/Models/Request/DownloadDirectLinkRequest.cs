@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Request
 {
-    public class DownloadDirectLinkRequest : RequestModel
+    public class DownloadDirectLinkRequest : ApiRequest
     {
         [JsonProperty("quick_key")]
         public string QuickKey { get; set; }

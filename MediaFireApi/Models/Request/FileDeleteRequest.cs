@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MediaFireApi.Models.Request
 {
-    public class FileDeleteRequest : RequestModel
+    public class FileDeleteRequest : ApiRequest
     {
         [JsonProperty("quick_key")]
         public string QuickKey { get; set; }

@@ -17,7 +17,7 @@ namespace MediaFireApi
         {
             await CheckSessionToken();
 
-            var req = new RequestModel()
+            var req = new ApiRequest()
             {
                 SessionToken = _sessionToken
             };
@@ -41,7 +41,7 @@ namespace MediaFireApi
         {
             await CheckSessionToken();
 
-            var req = new RequestModel()
+            var req = new ApiRequest()
             {
                 SessionToken = _sessionToken
             };
