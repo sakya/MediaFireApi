@@ -64,7 +64,7 @@ namespace MediaFireApi
             return new Uri($"{ApiBaseAddress}{action}");
         }
 
-        private async Task<ApiCallResponse> GetApiResponse(Uri uri, FormUrlEncodedContent content)
+        private async Task<ApiCallResponse> GetApiResponse(Uri uri, HttpContent content)
         {
             using (var res = await _client.PostAsync(uri, content)) {
                 var result = new ApiCallResponse(res.StatusCode, await res.Content.ReadAsStringAsync());
