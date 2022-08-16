@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using MediaFireApi;
 using NUnit.Framework;
@@ -14,8 +15,10 @@ public class File : TestBase
     public async Task<bool> GetInfo()
     {
         await CreateTestFile();
-        await _client.FileGetInfo(filePath: $"/{_testFileName}");
-        await _client.FileDelete(filePath: $"/{_testFileName}");
+        var fileInfo = await _client!.FileGetInfo(filePath: $"/{_testFileName}");
+        await _client.FileDelete(new []{ fileInfo.ToList()[0].QuickKey });
+        await _client.FilePurge(new []{ fileInfo.ToList()[0].QuickKey });
+
         Assert.Pass();
         return true;
     }
