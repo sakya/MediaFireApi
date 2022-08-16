@@ -10,6 +10,14 @@ namespace MediaFireApi
 {
     public partial class Client
     {
+        /// <summary>
+        /// Get folders info
+        /// </summary>
+        /// <param name="folderKeys">Folder keys</param>
+        /// <param name="folderPath">Folder path</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
@@ -34,7 +42,17 @@ namespace MediaFireApi
             return jsonRes?.Response.FolderInfos;
         }
 
-        public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey, FolderContentType contentType, int chunk = 1, int chunksize = 100)
+        /// <summary>
+        /// Returns a collection of top-level folders or files for target folder.
+        /// </summary>
+        /// <param name="folderKey">The folder key</param>
+        /// <param name="contentType">Specifies the type of content to return.</param>
+        /// <param name="chunk">Specifies which segment of the results to return starting from 1</param>
+        /// <param name="chunkSize">The number of items to include in each chunk returned. Range: 100 to 1000. Default: 100. </param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<FolderContentResponse.FolderContentModel> FolderGetContent(string folderKey, FolderContentType contentType, int chunk = 1, int chunkSize = 100)
         {
             if (string.IsNullOrEmpty(folderKey))
                 throw new ArgumentNullException(nameof(folderKey));
@@ -46,7 +64,7 @@ namespace MediaFireApi
                 FolderKey = folderKey,
 
                 ContentType = contentType,
-                ChunkSize = chunksize,
+                ChunkSize = chunkSize,
                 Chunk = chunk
             };
             var res = await GetApiResponse(GetApiUri("folder/get_content.php"), ToFormUrlEncodedContent(req));
@@ -63,12 +81,13 @@ namespace MediaFireApi
         /// Create a folder
         /// </summary>
         /// <param name="parentKey">The parent folder key</param>
+        /// <param name="parentPath">The parent folder path</param>
         /// <param name="name">The new folder name</param>
         /// <param name="actionOnDuplicate">The <see cref="ActionOnDuplicate"/></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<string> FolderCreate(string parentKey, string name, ActionOnDuplicate actionOnDuplicate = ActionOnDuplicate.Keep)
+        public async Task<string> FolderCreate(string parentKey = null, string parentPath = null, string name = null, ActionOnDuplicate actionOnDuplicate = ActionOnDuplicate.Keep)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
@@ -78,6 +97,7 @@ namespace MediaFireApi
             {
                 SessionToken = _sessionToken,
                 ParentKey = parentKey,
+                ParentPath = parentPath,
                 FolderName = name,
                 ActionOnDuplicate = actionOnDuplicate
             };
