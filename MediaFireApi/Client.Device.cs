@@ -31,9 +31,6 @@ namespace MediaFireApi
                 Chunk = chunk
             };
             var res = await GetApiResponse(GetApiUri("device/get_trash.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<DeviceGetTrashResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get trash");
 
@@ -59,9 +56,6 @@ namespace MediaFireApi
                 DeviceId = deviceId,
             };
             var res = await GetApiResponse(GetApiUri("device/empty_trash.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<DeviceEmptyTrashResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot empty trash");
 

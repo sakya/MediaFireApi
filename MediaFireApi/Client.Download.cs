@@ -29,9 +29,6 @@ namespace MediaFireApi
                 QuickKey = string.Join(",", quickKeys)
             };
             var res = await GetApiResponse(GetApiUri("file/get_links.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<DownloadDirectLinkResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get direct download link");
 

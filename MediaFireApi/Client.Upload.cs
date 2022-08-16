@@ -38,9 +38,6 @@ namespace MediaFireApi
                 Hash = hash
             };
             var res = await GetApiResponse(GetApiUri("upload/check.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<UploadCheckResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot check upload");
 

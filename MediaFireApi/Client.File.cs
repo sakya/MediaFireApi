@@ -31,9 +31,6 @@ namespace MediaFireApi
                 FilePath = filePath
             };
             var res = await GetApiResponse(GetApiUri("file/get_info.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileInfoResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get file info");
 
@@ -69,9 +66,6 @@ namespace MediaFireApi
                 FolderPath = targetFolderPath
             };
             var res = await GetApiResponse(GetApiUri("file/copy.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileCopyResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot copy file");
 
@@ -101,9 +95,6 @@ namespace MediaFireApi
                 ParentPath = parentPath
             };
             var res = await GetApiResponse(GetApiUri("file/create.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileCreateResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot create file");
 
@@ -131,9 +122,6 @@ namespace MediaFireApi
                 FilePath = filePath
             };
             var res = await GetApiResponse(GetApiUri("file/delete.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot delete file");
 
@@ -167,9 +155,6 @@ namespace MediaFireApi
                 FolderPath = targetFolderPath
             };
             var res = await GetApiResponse(GetApiUri("file/move.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot move file");
 
@@ -197,9 +182,6 @@ namespace MediaFireApi
                 FilePath = filePath
             };
             var res = await GetApiResponse(GetApiUri("file/purge.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileMoveResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot purge file");
 
@@ -236,9 +218,6 @@ namespace MediaFireApi
                 Truncate = truncate
             };
             var res = await GetApiResponse(GetApiUri("file/update.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot update file");
 

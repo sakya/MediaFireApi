@@ -22,9 +22,6 @@ namespace MediaFireApi
                 SessionToken = _sessionToken
             };
             var res = await GetApiResponse(GetApiUri("user/get_info.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<UserInfoResponse>>(res.Content);
             if (jsonRes?.Response?.UserInfo == null)
                 throw new Exception("Cannot get user info");
@@ -46,9 +43,6 @@ namespace MediaFireApi
                 SessionToken = _sessionToken
             };
             var res = await GetApiResponse(GetApiUri("user/renew_session_token.php"), ToFormUrlEncodedContent(req));
-            if (!res.IsSuccessStatusCode)
-                throw new Exception(res.Content);
-
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<RenewSessionTokenResponse>>(res.Content);
             if (jsonRes?.Response == null || string.IsNullOrEmpty(jsonRes.Response.SessionToken))
                 throw new Exception("Cannot get session token");

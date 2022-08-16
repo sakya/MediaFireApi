@@ -67,7 +67,13 @@ namespace MediaFireApi
         private async Task<ApiCallResponse> GetApiResponse(Uri uri, FormUrlEncodedContent content)
         {
             using (var res = await _client.PostAsync(uri, content)) {
-                return new ApiCallResponse(res.StatusCode, await res.Content.ReadAsStringAsync());
+                var result = new ApiCallResponse(res.StatusCode, await res.Content.ReadAsStringAsync());
+                if (!result.IsSuccessStatusCode) {
+                    var apiResponse = JsonConvert.DeserializeObject<ResponseModel<ErrorApiResponse>>(result.Content);
+                    if (apiResponse?.Response.Result == ApiResult.Error)
+                        throw new MediaFireApiException(apiResponse.Response.Error, apiResponse.Response.Message);
+                }
+                return result;
             }
         }
 
