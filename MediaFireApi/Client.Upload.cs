@@ -37,8 +37,10 @@ namespace MediaFireApi
             return jsonRes.Response;
         }
 
-        public async Task<bool> UploadSimple(Stream stream, string contentType, string fileName, long size, string folderKey = null, string path = null, ActionOnDuplicate? actionOnDuplicate = null)
+        public async Task UploadSimple(Stream stream, string contentType, string fileName, long size, string folderKey = null, string path = null, ActionOnDuplicate? actionOnDuplicate = null)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
             await CheckSessionToken();
 
             using (var client = new HttpClient()) {
@@ -54,12 +56,10 @@ namespace MediaFireApi
                                multipartFormContent)) {
                         var resContent = res.Content.ReadAsStringAsync();
                         if (!res.IsSuccessStatusCode)
-                            throw new Exception($"Failed to upload file: {res.Content}");
+                            throw new Exception($"Failed to upload file: {resContent}");
                     }
                 }
             }
-
-            return true;
         }
     }
 }
