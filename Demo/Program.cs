@@ -19,6 +19,7 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
     }
 }
 
+var userInfo = await client.UserGetInfo();
 var folderInfo = await client.FolderGetInfo("myfiles");
 var folderContent = await client.FolderGetContent("myfiles", FolderContentType.Folders);
 if (folderContent.Folders?.Count > 1) {

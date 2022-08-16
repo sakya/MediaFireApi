@@ -13,12 +13,26 @@ namespace MediaFireApi
 {
     public partial class Client : IDisposable
     {
+        internal class ApiCallResponse
+        {
+            public ApiCallResponse(HttpStatusCode statusCode, string content)
+            {
+                StatusCode = statusCode;
+                Content = content;
+            }
+
+            public HttpStatusCode StatusCode { get; set; }
+            public string Content { get; set; }
+
+            public bool IsSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+        }
+
         // https://www.mediafire.com/developers/core_api/1.5/getting_started/
         private const string ApiBaseAddress = "https://www.mediafire.com/api/1.5/";
         private string _sessionToken;
         private DateTime? _lastSessionRenew;
-        private HttpClient _client;
-        private HttpClientHandler _clientHandler;
+        private readonly HttpClient _client;
+        private readonly HttpClientHandler _clientHandler;
 
         public Client(ClientSettings settings)
         {
@@ -43,13 +57,20 @@ namespace MediaFireApi
             return new Uri($"{ApiBaseAddress}{action}");
         }
 
+        private async Task<ApiCallResponse> GetApiResponse(Uri uri, FormUrlEncodedContent content)
+        {
+            using (var res = await _client.PostAsync(uri, content)) {
+                return new ApiCallResponse(res.StatusCode, await res.Content.ReadAsStringAsync());
+            }
+        }
+
         private async Task CheckSessionToken()
         {
             if (string.IsNullOrEmpty(_sessionToken))
                 throw new Exception("Not logged in");
 
-            if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-10)) {
-                await RenewSessionToken();
+            if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-9)) {
+                await UserRenewSessionToken();
             }
         }
 

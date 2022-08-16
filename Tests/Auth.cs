@@ -29,7 +29,7 @@ public class Auth : TestBase
         var settings = new ClientSettings();
         using var client = new Client(settings);
         await client.Login(UserEmail, Password);
-        await client.RenewSessionToken();
+        await client.UserRenewSessionToken();
         await client.Logout();
 
         Assert.Pass();

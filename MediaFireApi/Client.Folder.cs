@@ -27,12 +27,11 @@ namespace MediaFireApi
                 SessionToken = _sessionToken,
                 FolderKey = string.Join("," ,folderKeys)
             };
-            var res = await _client.PostAsync(GetApiUri("folder/get_info.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/get_info.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderInfoResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderInfoResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get folder info");
 
             if (jsonRes?.Response.FolderInfos == null && jsonRes?.Response.FolderItemInfo != null)
@@ -55,12 +54,11 @@ namespace MediaFireApi
                 ChunkSize = chunksize,
                 Chunk = chunk
             };
-            var res = await _client.PostAsync(GetApiUri("folder/get_content.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/get_content.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderContentResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderContentResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get folder content");
 
             return jsonRes?.Response.FolderContent;
@@ -88,12 +86,11 @@ namespace MediaFireApi
                 FolderName = name,
                 ActionOnDuplicate = actionOnDuplicate
             };
-            var res = await _client.PostAsync(GetApiUri("folder/create.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/create.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCreateResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCreateResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot create folder");
 
             return jsonRes?.Response.FolderKey;
@@ -130,12 +127,11 @@ namespace MediaFireApi
                 SessionToken = _sessionToken,
                 FolderKey = string.Join(",", folderKeys)
             };
-            var res = await _client.PostAsync(GetApiUri("folder/delete.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/delete.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot delete folder");
 
             return true;
@@ -171,12 +167,11 @@ namespace MediaFireApi
                 SessionToken = _sessionToken,
                 FolderKey = string.Join(",", folderKeys)
             };
-            var res = await _client.PostAsync(GetApiUri("folder/purge.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/purge.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot purge folder");
 
             return true;
@@ -204,12 +199,11 @@ namespace MediaFireApi
                 FolderKeySrc = string.Join(",", folderKeys),
                 FolderKeyDst = targetFolderKey
             };
-            var res = await _client.PostAsync(GetApiUri("folder/copy.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/copy.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCopyResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCopyResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot copy folder");
 
             return jsonRes?.Response?.NewFolderKey.Split(',');
@@ -237,12 +231,11 @@ namespace MediaFireApi
                 FolderKeySrc = string.Join(",", folderKeys),
                 FolderKeyDst = targetFolderKey
             };
-            var res = await _client.PostAsync(GetApiUri("folder/move.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/move.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot move folder");
 
             return true;
@@ -275,12 +268,11 @@ namespace MediaFireApi
                 Privacy = privacy,
                 PrivacyRecursive = privacyRecursive
             };
-            var res = await _client.PostAsync(GetApiUri("folder/update.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("folder/update.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot update folder");
 
             return true;

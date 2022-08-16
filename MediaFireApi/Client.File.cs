@@ -34,12 +34,11 @@ namespace MediaFireApi
                 SessionToken = _sessionToken,
                 QuickKey = string.Join(",", quickKeys)
             };
-            var res = await _client.PostAsync(GetApiUri("file/get_info.php"), ToFormUrlEncodedContent(req));
-            var resContent = await res.Content.ReadAsStringAsync();
+            var res = await GetApiResponse(GetApiUri("file/get_info.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
-                throw new Exception(resContent);
+                throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileInfoResponse>>(resContent);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileInfoResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot get file info");
 
             if (jsonRes?.Response.FileInfos == null && jsonRes?.Response.FileItemInfo != null)
