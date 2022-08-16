@@ -69,7 +69,7 @@ namespace MediaFireApi
             using (var res = await _client.PostAsync(uri, content)) {
                 var result = new ApiCallResponse(res.StatusCode, await res.Content.ReadAsStringAsync());
                 if (!result.IsSuccessStatusCode) {
-                    var apiResponse = JsonConvert.DeserializeObject<ResponseModel<ErrorApiResponse>>(result.Content);
+                    var apiResponse = JsonConvert.DeserializeObject<ResponseModel<ApiErrorResponse>>(result.Content);
                     if (apiResponse?.Response.Result == ApiResult.Error)
                         throw new MediaFireApiException(apiResponse.Response.Error, apiResponse.Response.Message);
                 }
