@@ -173,5 +173,44 @@ namespace MediaFireApi
 
             return true;
         }
+
+        /// <summary>
+        /// Update a folder information.
+        /// </summary>
+        /// <param name="quickKey">File key</param>
+        /// <param name="filePath">File path</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="description">The file description</param>
+        /// <param name="privacy">The file <see cref="Privacy"/></param>
+        /// <param name="truncate">Specifies if the content of the file should be deleted. no(default) or yes.</param>
+        /// <returns>True on success</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FileUpdate(string quickKey = null, string filePath = null, string filename = null,
+            string description = null, YesNo? truncate = null, Privacy? privacy = null)
+        {
+            if (string.IsNullOrEmpty(quickKey))
+                throw new ArgumentNullException(nameof(quickKey));
+            await CheckSessionToken();
+
+            var req = new FileUpdateRequest()
+            {
+                SessionToken = _sessionToken,
+                QuickKey = quickKey,
+                FilePath = filePath,
+                FileName = filename,
+                Description = description,
+                Privacy = privacy,
+                Truncate = truncate
+            };
+            var res = await GetApiResponse(GetApiUri("file/update.php"), ToFormUrlEncodedContent(req));
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(res.Content);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
+            CheckApiResponse(jsonRes, "Cannot update file");
+
+            return true;
+        }
     }
 }
