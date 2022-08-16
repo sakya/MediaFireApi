@@ -2,8 +2,15 @@
     <Import Project="..\SolutionInfo.proj" />
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>MediaFireApi</PackageId>
+        <RootNamespace>MediaFireApi</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
