@@ -21,7 +21,7 @@ namespace MediaFireApi
         public async Task<List<FolderItem>> FolderGetInfo(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderInfoRequest()
@@ -122,7 +122,7 @@ namespace MediaFireApi
         public async Task<bool> FolderDelete(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderDeleteRequest()
@@ -152,7 +152,7 @@ namespace MediaFireApi
         public async Task<bool> FolderPurge(IEnumerable<string> folderKeys = null, string folderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderDeleteRequest()
@@ -177,23 +177,25 @@ namespace MediaFireApi
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
         /// <param name="targetFolderKey">The target folder key</param>
+        /// <param name="targetFolderPath">The target folder path</param>
         /// <returns>The keys of the newly created folders</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null)
+        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null, string targetFolderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
-            if (string.IsNullOrEmpty(targetFolderKey))
-                throw new ArgumentNullException(nameof(targetFolderKey));
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
+            if (string.IsNullOrEmpty(targetFolderKey) && string.IsNullOrEmpty(targetFolderPath))
+                throw new ArgumentException($"{nameof(targetFolderKey)} or ${nameof(targetFolderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderCopyRequest()
             {
                 SessionToken = _sessionToken,
                 FolderKeySrc = folderKeys != null ? string.Join(",", folderKeys) : null,
+                FolderPathSrc = folderPath,
                 FolderKeyDst = targetFolderKey,
-                FolderPath = folderPath
+                FolderPathDst = targetFolderPath
             };
             var res = await GetApiResponse(GetApiUri("folder/copy.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)
@@ -214,20 +216,20 @@ namespace MediaFireApi
         /// <returns>True on success</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> FolderMove(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null)
+        public async Task<bool> FolderMove(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null, string targetFolderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
-            if (string.IsNullOrEmpty(targetFolderKey))
-                throw new ArgumentNullException(nameof(targetFolderKey));
+                throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
+            if (string.IsNullOrEmpty(targetFolderKey) && string.IsNullOrEmpty(targetFolderPath))
+                throw new ArgumentException($"{nameof(targetFolderKey)} or ${nameof(targetFolderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FolderCopyRequest()
             {
                 SessionToken = _sessionToken,
                 FolderKeySrc = folderKeys != null ? string.Join(",", folderKeys) : null,
-                FolderPath = folderPath,
-                FolderKeyDst = targetFolderKey
+                FolderPathSrc = folderPath,
+                FolderKeyDst = targetFolderKey,
             };
             var res = await GetApiResponse(GetApiUri("folder/move.php"), ToFormUrlEncodedContent(req));
             if (!res.IsSuccessStatusCode)

@@ -21,7 +21,7 @@ namespace MediaFireApi
         public async Task<List<FileItem>> FileGetInfo(IEnumerable<string> quickKeys = null, string filePath = null)
         {
             if (quickKeys == null && string.IsNullOrEmpty(filePath))
-                throw new ArgumentException("quickKeys or filePath must be provided");
+                throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");
             await CheckSessionToken();
 
             var req = new FileInfoRequest()
@@ -55,9 +55,9 @@ namespace MediaFireApi
         public async Task<string[]> FileCopy(IEnumerable<string> quickKeys = null, string filePath = null, string targetFolderKey = null, string targetFolderPath = null)
         {
             if (quickKeys == null && string.IsNullOrEmpty(filePath))
-                throw new ArgumentException("FolderKeys or folderPath must be provided");
-            if (string.IsNullOrEmpty(targetFolderKey))
-                throw new ArgumentNullException(nameof(targetFolderKey));
+                throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");
+            if (string.IsNullOrEmpty(targetFolderKey) && string.IsNullOrEmpty(targetFolderPath))
+                throw new ArgumentException($"{nameof(targetFolderKey)} or ${nameof(targetFolderPath)} must be provided");
             await CheckSessionToken();
 
             var req = new FileCopyRequest()
@@ -89,7 +89,7 @@ namespace MediaFireApi
         public async Task<bool> FileDelete(IEnumerable<string> quickKeys = null, string filePath = null)
         {
             if (quickKeys == null && string.IsNullOrEmpty(filePath))
-                throw new ArgumentException("quickKeys or filePath must be provided");
+                throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");
             await CheckSessionToken();
 
             var req = new FileDeleteRequest()
@@ -104,6 +104,42 @@ namespace MediaFireApi
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot delete file");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Move files to a target folder
+        /// </summary>
+        /// <param name="quickKeys">Folder keys</param>
+        /// <param name="filePath">Folder path</param>
+        /// <param name="targetFolderKey">The target folder key</param>
+        /// <param name="targetFolderPath">The target folder path</param>
+        /// <returns>True on success</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FileMove(IEnumerable<string> quickKeys = null, string filePath = null, string targetFolderKey = null, string targetFolderPath = null)
+        {
+            if (quickKeys == null && string.IsNullOrEmpty(filePath))
+                throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");
+            if (string.IsNullOrEmpty(targetFolderKey) && string.IsNullOrEmpty(targetFolderPath))
+                throw new ArgumentException($"{nameof(targetFolderKey)} or ${nameof(targetFolderPath)} must be provided");
+            await CheckSessionToken();
+
+            var req = new FileCopyRequest()
+            {
+                SessionToken = _sessionToken,
+                QuickKey = quickKeys != null ? string.Join(",", quickKeys) : null,
+                FilePath = filePath,
+                FolderKey = targetFolderKey,
+                FolderPath = targetFolderPath
+            };
+            var res = await GetApiResponse(GetApiUri("file/move.php"), ToFormUrlEncodedContent(req));
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(res.Content);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
+            CheckApiResponse(jsonRes, "Cannot move file");
 
             return true;
         }
