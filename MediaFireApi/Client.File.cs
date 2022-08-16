@@ -45,8 +45,8 @@ namespace MediaFireApi
         /// <summary>
         /// Copy files to a target folder
         /// </summary>
-        /// <param name="quickKeys">Folder keys</param>
-        /// <param name="filePath">Folder path</param>
+        /// <param name="quickKeys">File keys</param>
+        /// <param name="filePath">File path</param>
         /// <param name="targetFolderKey">The target folder key</param>
         /// <param name="targetFolderPath">The target folder path</param>
         /// <returns>The keys of the newly created folders</returns>
@@ -102,7 +102,7 @@ namespace MediaFireApi
             if (!res.IsSuccessStatusCode)
                 throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot delete file");
 
             return true;
@@ -111,8 +111,8 @@ namespace MediaFireApi
         /// <summary>
         /// Move files to a target folder
         /// </summary>
-        /// <param name="quickKeys">Folder keys</param>
-        /// <param name="filePath">Folder path</param>
+        /// <param name="quickKeys">File keys</param>
+        /// <param name="filePath">File path</param>
         /// <param name="targetFolderKey">The target folder key</param>
         /// <param name="targetFolderPath">The target folder path</param>
         /// <returns>True on success</returns>
@@ -140,6 +140,36 @@ namespace MediaFireApi
 
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot move file");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Delete files permanently
+        /// </summary>
+        /// <param name="quickKeys">File keys</param>
+        /// <param name="filePath">File path</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> FilePurge(IEnumerable<string> quickKeys = null, string filePath = null)
+        {
+            if (quickKeys == null && string.IsNullOrEmpty(filePath))
+                throw new ArgumentException($"{nameof(quickKeys)} or {nameof(filePath)} must be provided");
+            await CheckSessionToken();
+
+            var req = new FileDeleteRequest()
+            {
+                SessionToken = _sessionToken,
+                QuickKey = quickKeys != null ? string.Join(",", quickKeys) : null,
+                FilePath = filePath
+            };
+            var res = await GetApiResponse(GetApiUri("file/purge.php"), ToFormUrlEncodedContent(req));
+            if (!res.IsSuccessStatusCode)
+                throw new Exception(res.Content);
+
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileDeleteResponse>>(res.Content);
+            CheckApiResponse(jsonRes, "Cannot purge file");
 
             return true;
         }
