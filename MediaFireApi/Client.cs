@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using MediaFireApi.Exceptions;
 using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
 using MediaFireApi.Models.Response;
@@ -85,7 +86,7 @@ namespace MediaFireApi
             if (apiResponse == null || apiResponse.Response == null)
                 throw new Exception(errorMessage);
             if (apiResponse.Response.Result == ApiResult.Error)
-                throw new Exception($"{errorMessage}: {apiResponse.Response.Message}");
+                throw new MediaFireApiException(apiResponse.Response.Error, apiResponse.Response.Message);
         }
 
         private FormUrlEncodedContent ToFormUrlEncodedContent(ApiRequest model)
