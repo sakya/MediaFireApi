@@ -200,7 +200,7 @@ namespace MediaFireApi
             if (!res.IsSuccessStatusCode)
                 throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileDeleteResponse>>(res.Content);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FileMoveResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot purge file");
 
             return true;

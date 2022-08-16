@@ -240,7 +240,7 @@ namespace MediaFireApi
             if (!res.IsSuccessStatusCode)
                 throw new Exception(res.Content);
 
-            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderDeleteResponse>>(res.Content);
+            var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderMoveResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot move folder");
 
             return true;
