@@ -41,7 +41,8 @@ namespace MediaFireApi.Models
         Image,
         Presentation,
         Spreadsheet,
-        Video
+        Video,
+        Other
     }
     public enum ActionOnDuplicate
     {

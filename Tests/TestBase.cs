@@ -29,7 +29,7 @@ public class TestBase
     }
 
     [OneTimeSetUp]
-    public async Task Setup()
+    public virtual async Task Setup()
     {
         var settings = new ClientSettings();
         _client = new Client(settings);
@@ -37,7 +37,7 @@ public class TestBase
     }
 
     [OneTimeTearDown]
-    public async Task ClassCleanup()
+    public virtual async Task ClassCleanup()
     {
         if (_client != null) {
             await _client.Logout();

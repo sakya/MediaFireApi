@@ -19,13 +19,10 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
     }
 }
 
-await client.DeviceGetTrash(contentType: FolderContentType.Folders);
-await client.DeviceEmptyTrash();
-
 var uploadCheck = await client.UploadCheck(Client.RootFolderKey, "test.mp4", 8 * 1024 * 1024);
 using (var ms = new MemoryStream()) {
     for (int i = 0; i < 1024*1024; i++) {
-        ms.Write(new byte[] {0 }, 0, 1);
+        ms.Write(new byte[] { 0 }, 0, 1);
     }
 
     ms.Seek(0, SeekOrigin.Begin);
