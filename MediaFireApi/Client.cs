@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Timers;
 using MediaFireApi.Exceptions;
 using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
@@ -37,6 +38,7 @@ namespace MediaFireApi
         // https://www.mediafire.com/developers/core_api/1.5/getting_started/
         private const string ApiBaseAddress = "https://www.mediafire.com/api/1.5/";
         private string _sessionToken;
+        private Timer _sessionTimer;
         private DateTime? _lastSessionRenew;
         private readonly HttpClient _client;
         private readonly HttpClientHandler _clientHandler;
@@ -47,17 +49,30 @@ namespace MediaFireApi
 
             _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
             _client = new HttpClient(_clientHandler);
+            _sessionTimer = new Timer(10000);
+            _sessionTimer.Elapsed += OnSessionTimer;
+            _sessionTimer.Start();
         }
 
         public ClientSettings Settings { get; private set; }
 
         public void Dispose()
         {
+            _sessionTimer?.Stop();
+            _sessionTimer?.Dispose();
             _client?.Dispose();
             _clientHandler?.Dispose();
         }
 
         #region private operations
+
+        private async void OnSessionTimer(object source, ElapsedEventArgs e)
+        {
+            if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-9)) {
+                await UserRenewSessionToken();
+            }
+        }
+
 
         private Uri GetApiUri(string action)
         {
@@ -81,10 +96,6 @@ namespace MediaFireApi
         {
             if (string.IsNullOrEmpty(_sessionToken))
                 throw new Exception("Not logged in");
-
-            if (_lastSessionRenew <= DateTime.UtcNow.AddMinutes(-9)) {
-                await UserRenewSessionToken();
-            }
         }
 
         private void CheckApiResponse<T>(ResponseModel<T> apiResponse, string errorMessage) where T : ApiResponse

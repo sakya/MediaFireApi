@@ -36,7 +36,8 @@ namespace MediaFireApi
         /// <exception cref="Exception"></exception>
         public async Task UserRenewSessionToken()
         {
-            await CheckSessionToken();
+            if (string.IsNullOrEmpty(_sessionToken))
+                throw new Exception("Not logged in");
 
             var req = new ApiRequest()
             {
