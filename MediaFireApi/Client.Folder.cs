@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaFireApi.Models;
@@ -11,7 +12,7 @@ namespace MediaFireApi
     public partial class Client
     {
         /// <summary>
-        /// Get folders info
+        /// Returns a list of a folder's details.
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
@@ -80,7 +81,7 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Create a folder
+        /// Creates a folder in a specified target destination.
         /// </summary>
         /// <param name="parentKey">The parent folder key</param>
         /// <param name="parentPath">The parent folder path</param>
@@ -114,7 +115,8 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Move folders to the trash can
+        /// Deletes one or more session user's folders by setting the folders' and their contents' delete_date properties and moving the folders and their contents to the trash can.
+        /// The folder is not deleted permanently but, rather, the folder is moved to the trash can.
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
@@ -144,8 +146,9 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Delete folders permanently
+        /// Deletes one or more of a session user's folders permanently, along with all contents of the folders, by removing their entries from the database.
         /// </summary>
+        /// <remarks>THIS OPTION CANNOT BE UNDONE</remarks>
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
         /// <returns></returns>
@@ -174,7 +177,7 @@ namespace MediaFireApi
         }
 
         /// <summary>
-        /// Copy folders to a target folder
+        /// Copies a session user's folder and its children to a target destination.
         /// </summary>
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
@@ -183,7 +186,7 @@ namespace MediaFireApi
         /// <returns>The keys of the newly created folders</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<string[]> FolderCopy(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null, string targetFolderPath = null)
+        public async Task<IEnumerable<string>> FolderCopy(IEnumerable<string> folderKeys = null, string folderPath = null, string targetFolderKey = null, string targetFolderPath = null)
         {
             if (folderKeys == null && string.IsNullOrEmpty(folderPath))
                 throw new ArgumentException($"{nameof(folderKeys)} or {nameof(folderPath)} must be provided");
@@ -206,7 +209,7 @@ namespace MediaFireApi
             var jsonRes = JsonConvert.DeserializeObject<ResponseModel<FolderCopyResponse>>(res.Content);
             CheckApiResponse(jsonRes, "Cannot copy folder");
 
-            return jsonRes?.Response?.NewFolderKey.Split(',');
+            return jsonRes?.Response?.NewFolderKey;
         }
 
         /// <summary>

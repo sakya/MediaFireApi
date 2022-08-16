@@ -21,5 +21,8 @@ namespace MediaFireApi.Models.Response
 
         [JsonProperty("message")]
         public string Message { get; set; }
+
+        [JsonProperty("deprecated")]
+        public string Deprecated { get; set; }
     }
 }
