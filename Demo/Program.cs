@@ -19,6 +19,16 @@ using (var fs = new FileStream("../../../../account-settings.json", FileMode.Ope
     }
 }
 
+var uploadCheck = await client.UploadCheck(Client.RootFolderKey, "test.mp4", 8 * 1024 * 1024);
+using (var ms = new MemoryStream()) {
+    for (int i = 0; i < 1024*1024; i++) {
+        ms.Write(new byte[] {0 }, 0, 1);
+    }
+
+    ms.Seek(0, SeekOrigin.Begin);
+    await client.UploadSimple(ms, "application/octet-stream", "test.bin", ms.Length, path: "/Documents");
+}
+
 var userInfo = await client.UserGetInfo();
 var folderInfo = await client.FolderGetInfo(new[] { Client.RootFolderKey });
 folderInfo = await client.FolderGetInfo(folderPath: "/Documents");
@@ -34,8 +44,5 @@ if (folderContent.Files?.Count > 0) {
 var newFolderKey = await client.FolderCreate(Client.RootFolderKey, name: "test");
 var folderDelete = await client.FolderDelete(new[] { newFolderKey });
 folderDelete = await client.FolderPurge(new[] { newFolderKey });
-
-var createFile = await client.FileCreate(Client.RootFolderKey, fileName: "test.txt");
-var uploadCheck = await client.UploadCheck(Client.RootFolderKey, "test.mp4", 8 * 1024 * 1024);
 
 await client.Logout();

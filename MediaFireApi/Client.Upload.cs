@@ -1,5 +1,8 @@
 using System;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MediaFireApi.Models;
 using MediaFireApi.Models.Request;
@@ -34,9 +37,29 @@ namespace MediaFireApi
             return jsonRes.Response;
         }
 
-        /*public async Task<UploadCheckResponse> UploadSimple(Stream stream, string contentType)
+        public async Task<bool> UploadSimple(Stream stream, string contentType, string fileName, long size, string folderKey = null, string path = null, ActionOnDuplicate? actionOnDuplicate = null)
         {
             await CheckSessionToken();
-        }*/
+
+            using (var client = new HttpClient()) {
+                client.DefaultRequestHeaders.Add("x-filename", fileName);
+                client.DefaultRequestHeaders.Add("x-filesize", size.ToString(CultureInfo.InvariantCulture));
+                using (var multipartFormContent = new MultipartFormDataContent()) {
+                    var fileStreamContent = new StreamContent(stream);
+                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                    multipartFormContent.Add(fileStreamContent, name: "file", fileName: fileName);
+                    using (var res = await client.PostAsync(
+                               GetApiUri(
+                                   $"upload/simple.php?session_token={_sessionToken}&folder_key={folderKey}&path={path}&action_on_duplicate={actionOnDuplicate.ToString().ToLower()}"),
+                               multipartFormContent)) {
+                        var resContent = res.Content.ReadAsStringAsync();
+                        if (!res.IsSuccessStatusCode)
+                            throw new Exception($"Failed to upload file: {res.Content}");
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }
