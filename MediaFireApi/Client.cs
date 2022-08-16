@@ -46,10 +46,11 @@ namespace MediaFireApi
         public Client(ClientSettings settings)
         {
             Settings = settings;
+            ValidateSettings();
 
             _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
             _client = new HttpClient(_clientHandler);
-            _sessionTimer = new Timer(10000);
+            _sessionTimer = new Timer(Settings.SessionKeepAliveTimeoutMs);
             _sessionTimer.Elapsed += OnSessionTimer;
             _sessionTimer.Start();
         }
@@ -65,6 +66,11 @@ namespace MediaFireApi
         }
 
         #region private operations
+        private void ValidateSettings()
+        {
+            if (Settings.SessionKeepAliveTimeoutMs <= 0)
+                throw new Exception($"{nameof(Settings.SessionKeepAliveTimeoutMs)} must be greater than zero");
+        }
 
         private async void OnSessionTimer(object source, ElapsedEventArgs e)
         {
