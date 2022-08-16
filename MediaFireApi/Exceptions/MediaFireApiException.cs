@@ -10,6 +10,10 @@ namespace MediaFireApi.Exceptions
             ErrorCode = errorCode;
         }
 
+        /// <summary>
+        /// The error code.
+        /// This should be one of <see cref="ErrorCodes"/>
+        /// </summary>
         public int? ErrorCode { get; private set; }
     }
 }
