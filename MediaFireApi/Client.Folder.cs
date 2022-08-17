@@ -227,6 +227,7 @@ namespace MediaFireApi
         /// <param name="folderKeys">Folder keys</param>
         /// <param name="folderPath">Folder path</param>
         /// <param name="targetFolderKey">The target folder key</param>
+        /// <param name="targetFolderPath">The target folder path</param>
         /// <returns>True on success</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>

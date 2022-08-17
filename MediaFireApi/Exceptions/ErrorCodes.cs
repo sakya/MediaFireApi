@@ -1,5 +1,8 @@
 namespace MediaFireApi.Exceptions
 {
+    /// <summary>
+    /// Error codes returned by the MediaFire API
+    /// </summary>
     public enum ErrorCodes
     {
         /// <summary>
@@ -394,6 +397,9 @@ namespace MediaFireApi.Exceptions
         /// Invalid card CCV code
         /// </summary>
         ErrorCardccvError = 200,
+        /// <summary>
+        /// Invalid card CCV code
+        /// </summary>
         InvalidCardCcvCode = 200,
         /// <summary>
         /// This transaction has been declined.

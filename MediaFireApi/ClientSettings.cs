@@ -1,5 +1,8 @@
 namespace MediaFireApi
 {
+    /// <summary>
+    /// The client settings
+    /// </summary>
     public class ClientSettings
     {
         /// <summary>

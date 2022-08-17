@@ -1,17 +1,26 @@
 namespace MediaFireApi.Models
 {
+    /// <summary>
+    /// API result
+    /// </summary>
     public enum ApiResult
     {
         Success,
         Error
     }
 
+    /// <summary>
+    /// Yes/No
+    /// </summary>
     public enum YesNo
     {
         No,
         Yes
     }
 
+    /// <summary>
+    /// Order
+    /// </summary>
     public enum Order
     {
         /// <summary>
@@ -24,12 +33,18 @@ namespace MediaFireApi.Models
         Desc
     }
 
+    /// <summary>
+    /// Folder content type
+    /// </summary>
     public enum FolderContentType
     {
         Folders,
         Files
     }
 
+    /// <summary>
+    /// File type
+    /// </summary>
     public enum FileType
     {
         Application,
@@ -44,6 +59,10 @@ namespace MediaFireApi.Models
         Video,
         Other
     }
+
+    /// <summary>
+    /// Action on duplicate
+    /// </summary>
     public enum ActionOnDuplicate
     {
         /// <summary>
@@ -60,6 +79,9 @@ namespace MediaFireApi.Models
         Replace
     }
 
+    /// <summary>
+    /// Privacy
+    /// </summary>
     public enum Privacy
     {
         Public,

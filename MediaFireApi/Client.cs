@@ -20,7 +20,13 @@ namespace MediaFireApi
     /// </summary>
     public partial class Client : IDisposable
     {
+        /// <summary>
+        /// The key of the root folder
+        /// </summary>
         public const string RootFolderKey = "myfiles";
+        /// <summary>
+        /// The key of the trash folder
+        /// </summary>
         public const string TrashFolderKey = "trash";
 
         internal class ApiCallResponse
@@ -46,6 +52,10 @@ namespace MediaFireApi
         private readonly HttpClient _client;
         private readonly HttpClientHandler _clientHandler;
 
+        /// <summary>
+        /// Create a new client using the given <see cref="ClientSettings"/>
+        /// </summary>
+        /// <param name="settings"></param>
         public Client(ClientSettings settings)
         {
             Settings = settings;
@@ -58,8 +68,14 @@ namespace MediaFireApi
             _sessionTimer.Start();
         }
 
+        /// <summary>
+        /// The <see cref="ClientSettings"/>
+        /// </summary>
         public ClientSettings Settings { get; private set; }
 
+        /// <summary>
+        /// Dispose the client
+        /// </summary>
         public void Dispose()
         {
             _sessionTimer?.Stop();
