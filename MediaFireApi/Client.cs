@@ -98,7 +98,6 @@ namespace MediaFireApi
             }
         }
 
-
         private Uri GetApiUri(string action)
         {
             return new Uri($"{ApiBaseAddress}{action}");

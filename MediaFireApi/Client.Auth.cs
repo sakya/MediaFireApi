@@ -98,7 +98,6 @@ namespace MediaFireApi
             _sessionToken = null;
             _lastSessionRenew = null;
             _sessionSema.Release();
-
         }
     }
 }
